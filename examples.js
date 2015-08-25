@@ -20,27 +20,29 @@ var Animal = new Class({
 
 
 // function declared first, then classified
-function Mammal(type,name,age){
-    Mammal.__super.constructor.call(this,type,name,age);
-    this.varFromMammal = 'mammal';
-}
 
-Mammal.classify({
+var Mammal = new Class({
+    $extends: Animal,
+    $construct: function Mammal(type,name,age){
+        Mammal.$parent.constructor.call(this,type,name,age);
+        this.varFromMammal = 'mammal';
+    },
     foobar: function(){
         console.log('Overwritten foobar');
     }
-}).extends(Animal);
+});
 
 
 // function declared first, then used in class declaration
 function Dog(name,age,breed){
-    Dog.__super.constructor.call(this,'dog',name,age);
+    Dog.$parent.constructor.call(this,'dog',name,age);
     this.breed = breed;
 
     this.varFromDog = 'dog';
 
-    // this.foobar();
-    Dog.__super.foobar.call(this);
+    this.foobar();
+    console.log(Dog.$parent);
+    Dog.$parent.foobar.call(this);
 }
 
 new Class(Dog,{
@@ -53,23 +55,26 @@ new Class(Dog,{
     foobar: function(){
         console.log('Current foobar');
     }
-}).extends(Mammal);
+},Mammal);
 
 // inline declaration
-var Terrier = new Class(function Terrier(name,age,breed){
-    Terrier.__super.constructor.call(this,name,age,breed + ' Terrier');
-    this.varFromTerrier = 'terrier';
-}).extends(Dog);
+var Terrier = new Class({
+    $extends: Dog,
+    $construct: function Terrier(name,age,breed){
+        Terrier.$parent.constructor.call(this,name,age,breed + ' Terrier');
+        this.varFromTerrier = 'terrier';
+    }
+});
 
 // inline declaration
 var Cat = new Class(function Cat(name,age){
-    Cat.__super.constructor.call(this,'cat',name,age);
+    Cat.$parent.constructor.call(this,'cat',name,age);
     this.evil = true;
 },{
     present: function(){
         console.log('Meow! I\'m ' + this.name + '!')
     }
-}).extends(Mammal);
+},Mammal);
 
 console.log('--------------------------------------------------------------------');
 var Mono = new Terrier('Mononoke',2.7,'West Highland White');

@@ -1,18 +1,33 @@
-function Class(fn,properties,descriptors,parent){
+/*
+    Syntax:
+
+    Class(fn, properties, parent, descriptor)
+        where:
+            fn: constructor function
+            properties: object with methods and properties
+            parent: Class to extend
+            descriptors: see 'props' parameter in https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties 
+    or
+    Class(<Object>)
+
+    example:
+    var MyClass = Class({
+        $extends: MySuperClass,
+        $construct: function MyClass(someVar){
+            MyClass.$parent.constructor.call(this,'dog',someVar);
+        },
+        $describe: { <see descriptors above> }
+        myMethod: function(){},
+        myProperty: 'foobar',
+    });
+*/
+
+function Class(fn,properties,parent,descriptors){
     function _merge(a,b){ for(v in b) b.hasOwnProperty(v) && (a[v] = b[v])}
     function _grab(obj,prop){
         var temp = obj[prop];
         delete obj[prop]
         return temp;
-    }
-    function _extends(parent){
-        function temp() { this.constructor = fn; }
-        temp.prototype = parent.prototype;
-        _merge(temp.prototype,fn.prototype)
-        fn.prototype = new temp;
-        fn.__super = parent.prototype
-
-        return fn;
     }
 
     if(typeof fn == 'object'){
@@ -22,16 +37,15 @@ function Class(fn,properties,descriptors,parent){
         descriptors = _grab(properties,'$describe');
     }
 
-    parent && _extends.call(fn,parent);
-    fn.extends = _extends;
+    if(parent){
+        function temp() { this.constructor = fn; }
+        temp.prototype = parent.prototype;
+        fn.prototype = new temp;
+        fn.$parent = parent.prototype;
+    }
+
     _merge(fn.prototype,properties);
     descriptors && Object.defineProperties(fn.prototype,descriptors);
 
     return fn;
-}
-
-// Alternative method of declaration
-Function.prototype.classify = function(prototype,descriptors,parent){
-    Array.prototype.unshift.call(arguments, this);
-    return Class.apply(Class,arguments);
 }
