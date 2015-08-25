@@ -1,4 +1,4 @@
-// inline declaration
+// object declaration
 var Animal = new Class({
     $construct: function Animal(type,name,age){
         this.type = type;

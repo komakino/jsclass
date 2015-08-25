@@ -1,5 +1,10 @@
 function Class(fn,properties,descriptors,parent){
     function _merge(a,b){ for(v in b) b.hasOwnProperty(v) && (a[v] = b[v])}
+    function _grab(obj,prop){
+        var temp = obj[prop];
+        delete obj[prop]
+        return temp;
+    }
     function _extends(parent){
         function temp() { this.constructor = fn; }
         temp.prototype = parent.prototype;
@@ -12,9 +17,9 @@ function Class(fn,properties,descriptors,parent){
 
     if(typeof fn == 'object'){
         properties = fn;
-        fn = properties['$construct']; delete properties['$construct'];
-        parent = properties['$extends']; delete properties['$extends'];
-        descriptors = properties['$describe']; delete properties['$describe'];
+        fn = _grab(properties,'$construct');
+        parent = _grab(properties,'$extends');
+        descriptors = _grab(properties,'$describe');
     }
 
     parent && _extends.call(fn,parent);
