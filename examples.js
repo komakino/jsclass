@@ -1,11 +1,12 @@
 // inline declaration
-var Animal = new Class(function Animal(type,name,age){
-    this.type = type;
-    this.name = name;
-    this.age = age;
-    this.evil = false;
-    this.varFromAnimal = 'animal';
-},{
+var Animal = new Class({
+    $construct: function Animal(type,name,age){
+        this.type = type;
+        this.name = name;
+        this.age = age;
+        this.evil = false;
+        this.varFromAnimal = 'animal';
+    },
     present: function(){
         console.log('Hi! My name is ' + this.name + ', and I\'m a ' + this.age + ' year old ' + this.type + '!');
     },
@@ -101,7 +102,8 @@ var tests = {
     varFromTerrier: Mono.varFromTerrier == 'terrier',
     nisseIsCat: Nisse instanceof Cat,
     vars: Mono.age == 2.7,
-    breed: Mono.breed == 'West Highland White Terrier'
+    breed: Mono.breed == 'West Highland White Terrier',
+    catsAreEvil: Nisse.isEvil() === true,
 }
 
 for(name in tests){
