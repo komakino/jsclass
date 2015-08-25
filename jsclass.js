@@ -1,8 +1,8 @@
-var Class = function(fn,prototype,parent,descriptors){
+function Class(fn,prototype,parent,descriptors){
     if(parent){
-        function proxy() { this.constructor = fn; }
-        proxy.prototype = parent.prototype;
-        fn.prototype = new proxy;
+        function temp() { this.constructor = fn; }
+        temp.prototype = parent.prototype;
+        fn.prototype = new temp;
         fn.__super = parent.prototype
     }
     
@@ -12,6 +12,7 @@ var Class = function(fn,prototype,parent,descriptors){
     return fn;
 }
 
+// Alternative method of declaration
 Function.prototype.classify = function(prototype,parent,descriptors){
     return Class(this,prototype,parent,descriptors);
 }
