@@ -31,7 +31,7 @@ function Class(fn,properties,descriptors,parent){
 }
 
 // Alternative method of declaration
-Function.prototype.classify = function(prototype,descriptors){
-    Class(this,prototype,descriptors);
-    return this;
+Function.prototype.classify = function(prototype,descriptors,parent){
+    Array.prototype.unshift.call(arguments, this);
+    return Class.apply(Class,arguments);
 }
