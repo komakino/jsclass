@@ -28,7 +28,7 @@ Mammal.classify({
     foobar: function(){
         console.log('Overwritten foobar');
     }
-},Animal);
+}).extends(Animal);
 
 
 // function declared first, then used in class declaration
@@ -38,7 +38,7 @@ function Dog(name,age,breed){
 
     this.varFromDog = 'dog';
 
-    this.foobar();
+    // this.foobar();
     Dog.__super.foobar.call(this);
 }
 
@@ -52,13 +52,13 @@ new Class(Dog,{
     foobar: function(){
         console.log('Current foobar');
     }
-},Mammal);
+}).extends(Mammal);
 
 // inline declaration
 var Terrier = new Class(function Terrier(name,age,breed){
     Terrier.__super.constructor.call(this,name,age,breed + ' Terrier');
     this.varFromTerrier = 'terrier';
-},null,Dog);
+}).extends(Dog);
 
 // inline declaration
 var Cat = new Class(function Cat(name,age){
@@ -68,7 +68,7 @@ var Cat = new Class(function Cat(name,age){
     present: function(){
         console.log('Meow! I\'m ' + this.name + '!')
     }
-},Mammal);
+}).extends(Mammal);
 
 console.log('--------------------------------------------------------------------');
 var Mono = new Terrier('Mononoke',2.7,'West Highland White');
