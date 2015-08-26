@@ -1,6 +1,6 @@
-# jsClass
+# jsclass
 
-Minimal javascript class "implementation" created primarily for my own needs.
+Standalone minimal javascript class "implementation" created primarily for my own needs.
 
 ### Syntax:
 
