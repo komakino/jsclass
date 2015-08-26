@@ -1,5 +1,5 @@
-Syntax:
-```
+### Syntax:
+```javascript
 var MyClass = Class($construct,properties,$extends,$describe,$errors);
 ```
     where:
@@ -8,16 +8,16 @@ var MyClass = Class($construct,properties,$extends,$describe,$errors);
         $extends: Class to extend
         $describe: see 'props' parameter in https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties 
         $errors: object where keys are errornames and values are messages or Error objects
-or
 
-```
+*or*
+```javascript
 var MyClass = Class(object)
 ```
-    Object with methods, properties and special properties: $construct, $extends, $describe, $errors
+Object with methods, properties and special properties: $construct, $extends, $describe, $errors
 
-Example:
+### Example:
 
-```
+```javascript
 var MyClass = Class({
     $extends: MySuperClass,
     $errors: {
