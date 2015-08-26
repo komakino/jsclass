@@ -1,18 +1,22 @@
 ### Syntax:
+
 ```javascript
 var MyClass = Class($construct,properties,$extends,$describe,$errors);
 ```
-    where:
-        $construct: constructor function
-        $properties: object with methods and properties
-        $extends: Class to extend
-        $describe: see 'props' parameter in https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties 
-        $errors: object where keys are errornames and values are messages or Error objects
+
+where:
+* $construct: constructor function
+* $properties: object with methods and properties
+* $extends: Class to extend
+* $describe: see 'props' parameter in https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties 
+* $errors: object where keys are errornames and values are messages or Error objects
 
 *or*
+
 ```javascript
 var MyClass = Class(object)
 ```
+
 Object with methods, properties and special properties: $construct, $extends, $describe, $errors
 
 ### Example:
