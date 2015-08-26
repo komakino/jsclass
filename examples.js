@@ -106,6 +106,8 @@ console.log(Bobo);
 console.log('--------------------------------------------------------------------');
 
 
+console.log('Mammal childof Animal: ',Dog.$lineage);
+
 var customError = new Terrier.$errors.TooCurledTailError();
 
 var tests = {
@@ -114,6 +116,10 @@ var tests = {
     typeInheritance3: Mono instanceof Mammal,
     typeInheritance4: Mono instanceof Animal,
     typeInheritance5: Bobo instanceof Animal,
+    parentage1: Dog.$childOf(Animal),
+    parentage2: Mammal.$childOf(Animal),
+    parentage3: Animal.$parentOf(Mammal),
+    parentage4: Mammal.$parentOf(Dog),
     varInheritance0: Mono.age == 2.7 && Mono.breed == 'West Highland White Terrier',
     varInheritance1: Mono.varFromTerrier == 'terrier',
     varInheritance2: Mono.varFromDog == 'dog',

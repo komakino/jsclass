@@ -25,10 +25,16 @@ function Class($construct,$properties,$extends,$describe,$errors){
     }
 
     if($extends){
+        $construct.$lineage = [];
+        $extends.$lineage && $extends.$lineage.map(function(v){$construct.$lineage.push(v)});
+        $construct.$lineage.push($extends);
         function temp() { this.constructor = $construct; }
         temp.prototype = $extends.prototype;
         $construct.prototype = new temp;
     }
+
+    $construct.$childOf = function(parent){ return this.$lineage && this.$lineage.indexOf(parent) > -1;}
+    $construct.$parentOf = function(parent){ return parent.$lineage && parent.$lineage.indexOf(this) > -1;}
 
     if($errors){
         $construct.$errors = {};
