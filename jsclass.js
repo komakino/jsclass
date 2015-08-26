@@ -18,10 +18,10 @@ function Class($construct,$properties,$extends,$describe,$errors){
 
     if(typeof $construct == 'object'){
         $properties = $construct;
-        $construct = _grab($properties,'$construct');
-        $extends = _grab($properties,'$extends');
-        $describe = _grab($properties,'$describe');
-        $errors = _grab($properties,'$errors');
+        $construct = _grab($properties,'$construct') || new Function();
+        $extends = _grab($properties,'$extends') || {};
+        $describe = _grab($properties,'$describe') || {};
+        $errors = _grab($properties,'$errors') || {};
     }
 
     if($extends){

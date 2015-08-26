@@ -78,6 +78,11 @@ var Cat = new Class(function Cat(name,age){
     }
 },Mammal);
 
+// no constructor
+var Monkey = new Class({
+    $extends: Mammal
+});
+
 console.log('--------------------------------------------------------------------');
 var Mono = new Terrier('Mononoke',2.7,'West Highland White');
 Mono.present();
@@ -88,15 +93,18 @@ var Nisse = new Cat('Nisse',24);
 Nisse.present();
 console.log(Nisse);
 Nisse.declareEvilness();
-
-
 console.log('--------------------------------------------------------------------');
 var Hedvig = new Dog('Hedvig',12,'dachshund');
 Hedvig.present();
 Hedvig.declareEvilness();
 console.log(Hedvig);
+console.log('--------------------------------------------------------------------');
 
 console.log('--------------------------------------------------------------------');
+var Bobo = new Monkey();
+console.log(Bobo);
+console.log('--------------------------------------------------------------------');
+
 
 var customError = new Terrier.$errors.TooCurledTailError();
 
@@ -105,6 +113,7 @@ var tests = {
     typeInheritance2: Mono instanceof Dog,
     typeInheritance3: Mono instanceof Mammal,
     typeInheritance4: Mono instanceof Animal,
+    typeInheritance5: Bobo instanceof Animal,
     varInheritance0: Mono.age == 2.7 && Mono.breed == 'West Highland White Terrier',
     varInheritance1: Mono.varFromTerrier == 'terrier',
     varInheritance2: Mono.varFromDog == 'dog',
