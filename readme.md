@@ -1,3 +1,7 @@
+# jsClass
+
+Minimal javascript class "implementation" created primarily for my own needs.
+
 ### Syntax:
 
 ```javascript
