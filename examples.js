@@ -24,25 +24,21 @@ var Animal = new Class({
 var Mammal = new Class({
     $extends: Animal,
     $construct: function Mammal(type,name,age){
-        Mammal.$parent.constructor.call(this,type,name,age);
+        Animal.call(this,type,name,age);
         this.varFromMammal = 'mammal';
     },
-    foobar: function(){
-        console.log('Overwritten foobar');
+    foo: function(){
+        return "baz";
     }
 });
 
 
 // function declared first, then used in class declaration
 function Dog(name,age,breed){
-    Dog.$parent.constructor.call(this,'dog',name,age);
+    Mammal.call(this,'dog',name,age);
     this.breed = breed;
 
     this.varFromDog = 'dog';
-
-    this.foobar();
-    console.log(Dog.$parent);
-    Dog.$parent.foobar.call(this);
 }
 
 new Class(Dog,{
@@ -52,23 +48,29 @@ new Class(Dog,{
     getHumanAge: function(){
         return Math.round(this.age * 7);
     },
-    foobar: function(){
-        console.log('Current foobar');
+    fooOriginal: function(){
+        return Mammal.prototype.foo();
+    },
+    foo: function(){
+        return "bar";
     }
 },Mammal);
 
-// inline declaration
+// object declaration
 var Terrier = new Class({
     $extends: Dog,
+    $errors: {
+        TooCurledTailError: 'This dogs tail is too curled!',
+    },
     $construct: function Terrier(name,age,breed){
-        Terrier.$parent.constructor.call(this,name,age,breed + ' Terrier');
+        Dog.call(this,name,age,breed + ' Terrier');
         this.varFromTerrier = 'terrier';
     }
 });
 
 // inline declaration
 var Cat = new Class(function Cat(name,age){
-    Cat.$parent.constructor.call(this,'cat',name,age);
+    Mammal.call(this,'cat',name,age);
     this.evil = true;
 },{
     present: function(){
@@ -96,22 +98,28 @@ console.log(Hedvig);
 
 console.log('--------------------------------------------------------------------');
 
+var customError = new Terrier.$errors.TooCurledTailError();
+
 var tests = {
-    monoIsAnimal: Mono instanceof Animal,
-    monoIsMammal: Mono instanceof Mammal,
-    monoIsDog: Mono instanceof Dog,
-    monoIsTerrier: Mono instanceof Terrier,
-    varFromAnimal: Mono.varFromAnimal == 'animal',
-    varFromMammal: Mono.varFromMammal == 'mammal',
-    varFromDog: Mono.varFromDog == 'dog',
-    varFromTerrier: Mono.varFromTerrier == 'terrier',
-    nisseIsCat: Nisse instanceof Cat,
-    vars: Mono.age == 2.7,
-    breed: Mono.breed == 'West Highland White Terrier',
-    catsAreEvil: Nisse.isEvil() === true,
+    typeInheritance1: Mono instanceof Terrier,
+    typeInheritance2: Mono instanceof Dog,
+    typeInheritance3: Mono instanceof Mammal,
+    typeInheritance4: Mono instanceof Animal,
+    varInheritance0: Mono.age == 2.7 && Mono.breed == 'West Highland White Terrier',
+    varInheritance1: Mono.varFromTerrier == 'terrier',
+    varInheritance2: Mono.varFromDog == 'dog',
+    varInheritance3: Mono.varFromMammal == 'mammal',
+    varInheritance4: Mono.varFromAnimal == 'animal',
+    functionInheritance1: Mono.foo() == 'bar',
+    functionInheritance2: Mono.fooOriginal() == 'baz',
+    functionInheritance3: Mono.isEvil() === false,
+    functionInheritance4: Nisse.isEvil() === true,
+    customErrorMessage: customError.message == "This dogs tail is too curled!",
+    customErrorType: customError instanceof Error,
 }
 
-for(name in tests){
-    tests.hasOwnProperty(name) && !tests[name] && !console.log('%s FAILED!',name) && function(){throw "FAIL"}();
-};
-console.log('PASS!',Mono);
+pass = true;
+
+for(name in tests) tests.hasOwnProperty(name) && !console.log(tests[name] ? ' PASS ' : '!FAIL!',name) && (pass = (pass && tests[name]));
+if (!pass) throw "FAILED!"
+
