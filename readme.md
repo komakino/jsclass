@@ -5,7 +5,7 @@ Standalone minimal javascript class "implementation" created primarily for my ow
 ### Syntax:
 
 ```javascript
-var MyClass = Class($construct,properties,$extends,$describe,$errors);
+var MyClass = Class($construct,$properties,$extends,$describe,$errors);
 ```
 
 * `$construct`: (*function*) constructor function
