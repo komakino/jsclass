@@ -38,7 +38,7 @@ var MyClass = Class({
     },
     $describe: { <see descriptors above> }
     myMethod: function(){
-        if(this.myPropert != 'foobar'){
+        if(this.myProperty != 'foobar'){
             throw new MyClass.$errors.MyCustomError();
         }
     },
