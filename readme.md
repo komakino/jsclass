@@ -48,3 +48,4 @@ var MyClass = Class({
 
 ### Notes
 * For IE8 support you need to polyfill `Array.prototype.indexOf`. See [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf#Polyfill)
+* IE8 does not support `Object.defineProperties`, which `$describe` uses. AFAIK it cannot be polyfilled.
