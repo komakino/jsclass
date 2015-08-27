@@ -12,7 +12,7 @@ var MyClass = Class($construct,properties,$extends,$describe,$errors);
 * `$properties`: (*object*) with methods and properties
 * `$extends`: (*function*) Class to extend
 * `$describe`: (*object*) See 'props' parameter [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties)
-* `$errors`: (*object*) where keys are errornames and values are messages or Error objects
+* `$errors`: (*object*) where keys are errornames and values are messages or Error objects. Accessible on the constructor(see example).
 
 *or*
 
@@ -37,7 +37,11 @@ var MyClass = Class({
         MySuperClass.prototype.myMethod.call(this);
     },
     $describe: { <see descriptors above> }
-    myMethod: function(){},
+    myMethod: function(){
+        if(this.myPropert != 'foobar'){
+            throw new MyClass.$errors.MyCustomError();
+        }
+    },
     myProperty: 'foobar',
 });
 ```
