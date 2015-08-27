@@ -1,3 +1,6 @@
+// Polyfill for IE<=8
+Array.prototype.indexOf||(Array.prototype.indexOf=function(a,b){var c;if(null==this)throw new TypeError('"this" is null or not defined');var d=Object(this),e=d.length>>>0;if(0===e)return-1;var f=+b||0;if(Math.abs(f)===1/0&&(f=0),f>=e)return-1;for(c=Math.max(f>=0?f:e-Math.abs(f),0);e>c;){if(c in d&&d[c]===a)return c;c++}return-1});
+
 // object declaration
 var Animal = new Class({
     $construct: function Animal(type,name,age){
@@ -49,7 +52,7 @@ new Class(Dog,{
         return Math.round(this.age * 7);
     },
     fooOriginal: function(){
-        return Mammal.prototype.foo();
+        return Mammal.prototype.foo.call(this);
     },
     foo: function(){
         return "bar";
@@ -86,7 +89,7 @@ var Monkey = new Class({
 console.log('--------------------------------------------------------------------');
 var Mono = new Terrier('Mononoke',2.7,'West Highland White');
 Mono.present();
-console.dir(Mono);
+console.log(Mono);
 Mono.declareEvilness();
 console.log('--------------------------------------------------------------------');
 var Nisse = new Cat('Nisse',24);
@@ -105,36 +108,36 @@ var Bobo = new Monkey();
 console.log(Bobo);
 console.log('--------------------------------------------------------------------');
 
-
-console.log('Mammal childof Animal: ',Dog.$lineage);
-
 var customError = new Terrier.$errors.TooCurledTailError();
 
 var tests = {
-    typeInheritance1: Mono instanceof Terrier,
-    typeInheritance2: Mono instanceof Dog,
-    typeInheritance3: Mono instanceof Mammal,
-    typeInheritance4: Mono instanceof Animal,
-    typeInheritance5: Bobo instanceof Animal,
-    parentage1: Dog.$childOf(Animal),
-    parentage2: Mammal.$childOf(Animal),
-    parentage3: Animal.$parentOf(Mammal),
-    parentage4: Mammal.$parentOf(Dog),
-    varInheritance0: Mono.age == 2.7 && Mono.breed == 'West Highland White Terrier',
-    varInheritance1: Mono.varFromTerrier == 'terrier',
-    varInheritance2: Mono.varFromDog == 'dog',
-    varInheritance3: Mono.varFromMammal == 'mammal',
-    varInheritance4: Mono.varFromAnimal == 'animal',
-    functionInheritance1: Mono.foo() == 'bar',
-    functionInheritance2: Mono.fooOriginal() == 'baz',
-    functionInheritance3: Mono.isEvil() === false,
-    functionInheritance4: Nisse.isEvil() === true,
-    customErrorMessage: customError.message == "This dogs tail is too curled!",
-    customErrorType: customError instanceof Error,
+    typeInheritance1:       Mono instanceof Terrier,
+    typeInheritance2:       Mono instanceof Dog,
+    typeInheritance3:       Mono instanceof Mammal,
+    typeInheritance4:       Mono instanceof Animal,
+    typeInheritance5:       Mono instanceof Class,
+    typeInheritance6:       Bobo instanceof Animal,
+    parentage1:             Dog.$childOf(Animal),
+    parentage2:             Mammal.$childOf(Animal),
+    parentage3:             Animal.$parentOf(Mammal),
+    parentage4:             Mammal.$parentOf(Dog),
+    parentage5:             Mammal.$parent == Animal,
+    varInheritance0:        Mono.age == 2.7 && Mono.breed == 'West Highland White Terrier',
+    varInheritance1:        Mono.varFromTerrier == 'terrier',
+    varInheritance2:        Mono.varFromDog == 'dog',
+    varInheritance3:        Mono.varFromMammal == 'mammal',
+    varInheritance4:        Mono.varFromAnimal == 'animal',
+    functionInheritance0:   Nisse.foo() == 'baz',
+    functionInheritance1:   Mono.foo() == 'bar',
+    functionInheritance2:   Mono.fooOriginal() == 'baz',
+    functionInheritance3:   Mono.isEvil() === false,
+    functionInheritance4:   Nisse.isEvil() === true,
+    customErrorMessage:     customError.message == "This dogs tail is too curled!",
+    customErrorType:        customError instanceof Error,
 }
 
 pass = true;
 
 for(name in tests) tests.hasOwnProperty(name) && !console.log(tests[name] ? ' PASS ' : '!FAIL!',name) && (pass = (pass && tests[name]));
-if (!pass) throw "FAILED!"
-
+document.body.style.backgroundColor = pass ? '#009900' : '#990000';
+document.body.innerHTML = pass ? 'PASS' : 'FAIL';

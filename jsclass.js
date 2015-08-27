@@ -18,23 +18,25 @@ function Class($construct,$properties,$extends,$describe,$errors){
 
     if(typeof $construct == 'object'){
         $properties = $construct;
-        $construct = _grab($properties,'$construct') || new Function();
-        $extends = _grab($properties,'$extends') || {};
-        $describe = _grab($properties,'$describe') || {};
-        $errors = _grab($properties,'$errors') || {};
+        $construct  = _grab($properties,'$construct');
+        $extends    = _grab($properties,'$extends');
+        $describe   = _grab($properties,'$describe');
+        $errors     = _grab($properties,'$errors');
     }
 
-    if($extends){
-        $construct.$lineage = [];
-        $extends.$lineage && $extends.$lineage.map(function(v){$construct.$lineage.push(v)});
-        $construct.$lineage.push($extends);
-        function temp() { this.constructor = $construct; }
-        temp.prototype = $extends.prototype;
-        $construct.prototype = new temp;
-    }
+    $construct  || ($construct = new Function());
+    $extends    || ($extends = Class);
 
-    $construct.$childOf = function(parent){ return this.$lineage && this.$lineage.indexOf(parent) > -1;}
-    $construct.$parentOf = function(parent){ return parent.$lineage && parent.$lineage.indexOf(this) > -1;}
+    $construct.$lineage = $extends.$lineage ? $extends.$lineage.slice(0) : [];
+    $construct.$lineage.push($extends);
+
+    function temp() { this.constructor = $construct; }
+    temp.prototype = $extends.prototype;
+    $construct.prototype = new temp;
+
+    $construct.$childOf     = function(parent){ return this.$lineage && this.$lineage.indexOf(parent) > -1;}
+    $construct.$parentOf    = function(parent){ return parent.$lineage && parent.$lineage.indexOf(this) > -1;}
+    $construct.$parent      = $extends;
 
     if($errors){
         $construct.$errors = {};

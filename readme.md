@@ -41,3 +41,6 @@ var MyClass = Class({
     myProperty: 'foobar',
 });
 ```
+
+### Notes
+* For IE8 support you need to polyfill `Array.prototype.indexOf`. See [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf#Polyfill)
