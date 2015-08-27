@@ -1,6 +1,10 @@
 // Polyfill for IE<=8
 Array.prototype.indexOf||(Array.prototype.indexOf=function(a,b){var c;if(null==this)throw new TypeError('"this" is null or not defined');var d=Object(this),e=d.length>>>0;if(0===e)return-1;var f=+b||0;if(Math.abs(f)===1/0&&(f=0),f>=e)return-1;for(c=Math.max(f>=0?f:e-Math.abs(f),0);e>c;){if(c in d&&d[c]===a)return c;c++}return-1});
 
+var MixinClass = new Class({
+    mixedInFunction: function(){},
+});
+
 // object declaration
 var Animal = new Class({
     $construct: function Animal(type,name,age){
@@ -62,6 +66,7 @@ new Class(Dog,{
 // object declaration
 var Terrier = new Class({
     $extends: Dog,
+    $mixin: MixinClass,
     $errors: {
         TooCurledTailError: 'This dogs tail is too curled!',
     },

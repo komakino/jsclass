@@ -1,4 +1,4 @@
-function Class($construct,$properties,$extends,$describe,$errors){
+function Class($construct,$methods,$extends,$describe,$errors){
     function _merge(a,b){ for(v in b) b.hasOwnProperty(v) && (a[v] = b[v])}
     function _grab(obj,prop){
         var temp = obj[prop];
@@ -17,11 +17,11 @@ function Class($construct,$properties,$extends,$describe,$errors){
     }
 
     if(typeof $construct == 'object'){
-        $properties = $construct;
-        $construct  = _grab($properties,'$construct');
-        $extends    = _grab($properties,'$extends');
-        $describe   = _grab($properties,'$describe');
-        $errors     = _grab($properties,'$errors');
+        $methods    = $construct;
+        $construct  = _grab($methods,'$construct');
+        $extends    = _grab($methods,'$extends');
+        $describe   = _grab($methods,'$describe');
+        $errors     = _grab($methods,'$errors');
     }
 
     $construct  || ($construct = new Function());
@@ -44,7 +44,7 @@ function Class($construct,$properties,$extends,$describe,$errors){
             $errors.hasOwnProperty(name) && ($construct.$errors[name] = (typeof $errors[name] == 'function') ? $errors[name] : _createError(name,$errors[name]))
     }
 
-    _merge($construct.prototype,$properties);
+    _merge($construct.prototype,$methods);
     $describe && Object.defineProperties($construct.prototype,$describe);
 
     return $construct;
