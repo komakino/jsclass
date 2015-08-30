@@ -1,5 +1,63 @@
-function Class($construct,$methods,$extends,$describe,$errors){
-    function _merge(a,b){ for(v in b) b.hasOwnProperty(v) && (a[v] = b[v])}
+(function(context){
+    context = context || this;
+    context.Class = function Class(properties){
+        // Grab special properties
+        var construct   = _grab(properties,'$construct')   || new Function(),
+            parent      = _grab(properties,'$extend')      || Class,
+            mixin       = _grab(properties,'$mixin')       || [],
+            describe    = _grab(properties,'$describe'),
+            errors      = _grab(properties,'$errors');
+
+        // Set up lineage
+        parent.$lineage && console.log(parent.$lineage.constructor == Array);
+        construct.$lineage = parent.$lineage ? _clone(parent.$lineage) : [];
+        construct.$lineage.push(parent);
+
+
+        // Prototyping
+        function temp() { this.constructor = construct; }
+        temp.prototype = parent.prototype;
+        construct.prototype = new temp;
+
+        // Relation methods
+        construct.$childOf     = function(parent){ return this.$lineage && this.$lineage.indexOf(parent) > -1;}
+        construct.$parentOf    = function(parent){ return parent.$lineage && parent.$lineage.indexOf(this) > -1;}
+        construct.$parent      = parent;
+
+        // Create error classes
+        construct.$error = {};
+        if(errors){
+            for(name in errors) {
+                if(!errors.hasOwnProperty(name)) continue;
+                construct.$error[name] = (typeof errors[name] == 'function') ? errors[name] : _createError(name,errors[name]);
+            }
+        }
+
+        // Apply properties and mixins
+        typeof mixin == 'array' || (mixin = [mixin]);
+        mixin.push(properties);
+        if(mixin){
+            mixin.map(function(m){ 
+                if(typeof m == 'function') 'prototype' in m && _merge(construct.prototype,m.prototype);
+                else if(typeof m == 'object') _merge(construct.prototype,m);
+            });
+        }
+
+        // Define properties
+        describe && 'defineProperties' in Object && Object.defineProperties(construct.prototype,describe);
+
+        return construct;
+    }
+
+    function _merge(a,b){ for(v in b) b.hasOwnProperty(v) && (a[v] = _clone(b[v]))}
+    function _clone(value){
+        if (value === null || value === undefined) return value;
+        switch(true){
+            case (value.constructor === Array): return Array.prototype.slice.call(value);
+            case (typeof value === 'object'): return JSON.parse(JSON.stringify(value));
+            default: return value;
+        }
+    }
     function _grab(obj,prop){
         var temp = obj[prop];
         delete obj[prop]
@@ -7,7 +65,7 @@ function Class($construct,$methods,$extends,$describe,$errors){
     }
     function _createError(name,defaultMessage){
         return Class({
-            $extends: Error,
+            $extend: Error,
             $construct: function(message){
                 Error.call(this);
                 this.name = name;
@@ -16,36 +74,5 @@ function Class($construct,$methods,$extends,$describe,$errors){
         })
     }
 
-    if(typeof $construct == 'object'){
-        $methods    = $construct;
-        $construct  = _grab($methods,'$construct');
-        $extends    = _grab($methods,'$extends');
-        $describe   = _grab($methods,'$describe');
-        $errors     = _grab($methods,'$errors');
-    }
-
-    $construct  || ($construct = new Function());
-    $extends    || ($extends = Class);
-
-    $construct.$lineage = $extends.$lineage ? $extends.$lineage.slice(0) : [];
-    $construct.$lineage.push($extends);
-
-    function temp() { this.constructor = $construct; }
-    temp.prototype = $extends.prototype;
-    $construct.prototype = new temp;
-
-    $construct.$childOf     = function(parent){ return this.$lineage && this.$lineage.indexOf(parent) > -1;}
-    $construct.$parentOf    = function(parent){ return parent.$lineage && parent.$lineage.indexOf(this) > -1;}
-    $construct.$parent      = $extends;
-
-    if($errors){
-        $construct.$errors = {};
-        for(name in $errors) 
-            $errors.hasOwnProperty(name) && ($construct.$errors[name] = (typeof $errors[name] == 'function') ? $errors[name] : _createError(name,$errors[name]))
-    }
-
-    _merge($construct.prototype,$methods);
-    $describe && Object.defineProperties($construct.prototype,$describe);
-
-    return $construct;
-}
+    return Class;
+})();

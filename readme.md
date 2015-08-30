@@ -5,28 +5,22 @@ Standalone minimal javascript class "implementation" created primarily for my ow
 ### Syntax:
 
 ```javascript
-var MyClass = Class($construct,$properties,$extends,$describe,$errors);
-```
-
-* `$construct`: (*function*) constructor function
-* `$properties`: (*object*) with methods and properties
-* `$extends`: (*function*) Class to extend
-* `$describe`: (*object*) See 'props' parameter [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties)
-* `$errors`: (*object*) where keys are errornames and values are messages or Error objects. Accessible on the constructor(see example).
-
-*or*
-
-```javascript
 var MyClass = Class(object);
 ```
 
-Object with methods, properties and special properties: `$construct`, `$extends`, `$describe`, `$errors`.
+* `object`: A set of properties and methods, plus the following special properties:
+    * `$construct`: (*function*) constructor function
+    * `$extends`: (*function*) Class to extend
+    * `$mixin`: Either a single [*object*|*Class*] or an array of them.
+    * `$describe`: (*object*) See 'props' parameter [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties)
+    * `$errors`: (*object*) where keys are errornames and values are messages or Error objects. Accessible on the constructor(see example).
 
 ### Example:
 
 ```javascript
 var MyClass = Class({
     $extends: MySuperClass,
+    $mixin: AnotherClassWithNiceMethods
     $errors: {
         MyCustomError: "Something failed horribly!",
     },
@@ -36,7 +30,6 @@ var MyClass = Class({
         // Call parent method that is locally overridden
         MySuperClass.prototype.myMethod.call(this);
     },
-    $describe: { <see descriptors above> }
     myMethod: function(){
         if(this.myProperty != 'foobar'){
             throw new MyClass.$errors.MyCustomError();
@@ -48,5 +41,4 @@ var MyClass = Class({
 
 ### Notes
 * For IE8 support you need to polyfill `Array.prototype.indexOf`. See [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf#Polyfill)
-* For IE8 support you need to polyfill `Array.prototype.forEach`. See [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach#Polyfill)
 * IE8 does not support `Object.defineProperties`, which `$describe` uses. AFAIK it cannot be polyfilled.
