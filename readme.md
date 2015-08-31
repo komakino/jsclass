@@ -10,7 +10,7 @@ var MyClass = Class(object);
 
 * `object`: A set of properties and methods, plus the following special properties:
     * `$construct`: (*function*) constructor function
-    * `$extends`: (*function*) Class to extend
+    * `$extend`: (*function*) Class to extend
     * `$mixin`: Either a single [*object*|*Class*] or an array of them.
     * `$describe`: (*object*) See 'props' parameter [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties)
     * `$errors`: (*object*) where keys are errornames and values are messages or Error objects. Accessible on the constructor(see example).
@@ -19,7 +19,7 @@ var MyClass = Class(object);
 
 ```javascript
 var MyClass = Class({
-    $extends: MySuperClass,
+    $extend: MySuperClass,
     $mixin: AnotherClassWithNiceMethods
     $errors: {
         MyCustomError: "Something failed horribly!",
