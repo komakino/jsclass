@@ -9,7 +9,6 @@
             errors      = _grab(properties,'$errors');
 
         // Set up lineage
-        parent.$lineage && console.log(parent.$lineage.constructor == Array);
         construct.$lineage = parent.$lineage ? _clone(parent.$lineage) : [];
         construct.$lineage.push(parent);
 
